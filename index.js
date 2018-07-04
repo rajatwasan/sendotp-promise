@@ -253,5 +253,5 @@ class SendOtp {
 
 }
 
-module.exorts = SendOtp;
+module.exports = SendOtp;
 
