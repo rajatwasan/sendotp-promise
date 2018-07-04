@@ -16,7 +16,7 @@ class SendOtp {
         }else{
             this.messageTemplate = "Your otp is {{otp}}. Please do not share it with anybody";
         }
-        this.otp_expiry = 1440; //1 Day =1440 minutes
+        this.otp_expiry = 30; //1 Day =1440 minutes
     }
 
     /**
@@ -36,21 +36,22 @@ class SendOtp {
     }
 
     /**
-     * Returns the 4 digit otp
-     * @returns {integer} 4 digit otp
+     * Returns the 6 digit otp
+     * @returns {integer} 6 digit otp
      */
     static generateOtp() {
-        return Math.floor(1000 + Math.random() * 9000);
+        return Math.floor(100000 + Math.random() * 900000);
     }
 
     /**
      * Send Otp to given mobile number
-     * @param {string} contactNumber receiver's mobile number along with country code
-     * @param {string} senderId
+     * @param {string, optional} contactNumber receiver's mobile number along with country code
+     * @param {string, optional} senderId
      * @param {string, optional} otp
+     * @param {string, optional} email receiver's email
      * Return promise if no callback is passed and promises available
      */
-    send(contactNumber, senderId, otp, callback) {
+    send(contactNumber, senderId, otp, callback, email) {
         if (!otp || typeof otp === 'function') {
             callback = otp;
             otp = SendOtp.generateOtp()
@@ -65,7 +66,27 @@ class SendOtp {
             };
         return SendOtp.doRequest('get', "sendotp.php", args, callback);
     }
-
+        /**
+     * Send Otp to given mobile number
+     * @param {string} email receiver's email
+     * @param {string, optional} otp
+     * Return promise if no callback is passed and promises available
+     */
+    sendEmailOtp(email, otp, callback) {
+        if (!otp || typeof otp === 'function') {
+            callback = otp;
+            otp = SendOtp.generateOtp()
+        }
+        let args_email = {
+                authkey: this.authKey,
+                email: email,
+                template: 226,
+                otp: otp,
+                expiry: this.otp_expiry
+            };
+            
+        return SendOtp.doRequest('get', "sendmailotp.php", args_email, callback);
+    }
     /**
      * Retry Otp to given mobile number
      * @param {string} contactNumber receiver's mobile number along with country code
@@ -100,6 +121,20 @@ class SendOtp {
             };
         return SendOtp.doRequest('get', "verifyRequestOTP.php", args, callback);
     }
+        /**
+     * Verify Otp to given email
+     * @param {string} email receiver's mobile number along with country code
+     * @param {string} otp otp to verify
+     * Return promise if no callback is passed and promises available
+     */
+    verifyEmail(email, otp, callback) {
+        let args = {
+                authkey: this.authKey,
+                email: email,
+                otp: otp
+            };
+        return SendOtp.doRequest('get', "verifyRequestOTP.php", args, callback);
+    }
 
     static doRequest (method, path, params, callback) {
         let promise = false;
@@ -115,7 +150,7 @@ class SendOtp {
 
         let options = {
             method: method,
-            url: SendOtp.getBaseURL() + "" + path
+            url: SendOtp.getBaseURL() + "" + path,
         };
 
         if (method === 'get') {
@@ -218,4 +253,5 @@ class SendOtp {
 
 }
 
-module.exports = SendOtp;
+module.exorts = SendOtp;
+
