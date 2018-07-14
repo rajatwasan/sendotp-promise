@@ -70,17 +70,21 @@ class SendOtp {
      * Send Otp to given mobile number
      * @param {string} email receiver's email
      * @param {string, optional} otp
+     * @param {number, optional} templateN
      * Return promise if no callback is passed and promises available
      */
-    sendEmailOtp(email, otp, callback) {
+    sendEmailOtp(email, otp, templateN, callback) {
         if (!otp || typeof otp === 'function') {
             callback = otp;
             otp = SendOtp.generateOtp()
         }
+        if (!templateN){
+            templateN = 255;
+        }
         let args_email = {
                 authkey: this.authKey,
                 email: email,
-                template: 226,
+                template: templateN,
                 otp: otp,
                 expiry: this.otp_expiry
             };
@@ -121,21 +125,6 @@ class SendOtp {
             };
         return SendOtp.doRequest('get', "verifyRequestOTP.php", args, callback);
     }
-        /**
-     * Verify Otp to given email
-     * @param {string} email receiver's mobile number along with country code
-     * @param {string} otp otp to verify
-     * Return promise if no callback is passed and promises available
-     */
-    verifyEmail(email, otp, callback) {
-        let args = {
-                authkey: this.authKey,
-                email: email,
-                otp: otp
-            };
-        return SendOtp.doRequest('get', "verifyRequestOTP.php", args, callback);
-    }
-
     static doRequest (method, path, params, callback) {
         let promise = false;
 
