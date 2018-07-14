@@ -28,14 +28,14 @@
   "directories": {
     "test": "test"
   },
-  "author": "Ashok Dey <ashokdey100@gmail.com> (ashokdey.in)",
+  "author": "Rajat Wasan <rajatwasan12@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ashokdey/sendotp-promise.git"
+    "url": "git+https://github.com/rajatwasan/sendotp-promise.git"
   },
   "bugs": {
-    "url": "https://github.com/ashokdey/sendotp-promise/issues"
+    "url": "https://github.com/rajatwasan/sendotp-promise/issues"
   },
-  "homepage": "https://github.com/ashokdey/sendotp-promise#readme"
+  "homepage": "https://github.com/rajatwasan/sendotp-promise#readme"
 }
